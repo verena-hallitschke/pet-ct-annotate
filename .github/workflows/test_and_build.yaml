@@ -1,0 +1,49 @@
+name: Linting and Code Formatting
+on: push
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install Dependencies
+        run: |
+          pip install numpy==1.22.1
+          pip install -r requirements.txt
+      - name: Run Linting on Code
+        run: |
+          pylint --fail-under=9 src/*
+      - name: Run Linting on Tests
+        run: |
+          pylint --fail-under=9 tests/*
+        
+
+  black:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black=="19.10b0"
+          pip install click=="8.0.4"
+      - name: Run Black
+        run: |
+          black --check src/
+          black --check tests/

@@ -1,0 +1,3 @@
+[submodule "MONAILabelMultimodality"]
+	path = MONAILabelMultimodality
+	url = git@github.com:verena-hallitschke/MONAILabelMultimodality.git
