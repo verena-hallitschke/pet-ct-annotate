@@ -30,6 +30,7 @@ from transforms.roi_transform import RegionOfInterestTransform
 from transforms.logging_transform import SaveImageToFiled
 from transforms.ensure_annotation_transform import EnsurePrediction
 
+ALLOW_PROPOSAL = True
 
 def init_transforms_load_and_normalize():
     """
@@ -234,7 +235,6 @@ class PETCTAnnotationInferTask(monailabel.interfaces.tasks.infer.InferTask):
 
     def post_transforms(self, data=None) -> Sequence[Callable]:
         transforms = [
-            monai.transforms.Activationsd(keys="pred", sigmoid=True),
             monai.transforms.ToNumpyd(keys=["CT", "pred"]),
         ]
         if self.postprocessing == "direct":
@@ -363,11 +363,14 @@ class PETCTAnnotationInferTask(monailabel.interfaces.tasks.infer.InferTask):
     def run_inferer(self, data, convert_to_batch=True, device="cuda"):
         if (
             self.preprocess_network is not None
-            and torch.count_nonzero(data["annotation_fg"]) == 0
-            and torch.count_nonzero(data["annotation_bg"]) == 0
+            and torch.count_nonzero(data["annotation_fg"] != np.float32(10)) == 0
+            and torch.count_nonzero(data["annotation_bg"] != np.float32(10)) == 0
         ):
-            # no user input, return proposal as output
-            data["pred"] = data["proposal"]
+            if ALLOW_PROPOSAL:
+                # no user input, return proposal as output
+                data["pred"] = data["proposal"]
+            else:
+                data["pred"] = np.zeros_like(data["CT"])
             return data
 
         inferer = self.inferer()
@@ -389,6 +392,7 @@ class PETCTAnnotationInferTask(monailabel.interfaces.tasks.infer.InferTask):
         if self.preprocess_network is not None:
             inferer_args += [proposal]
         data["pred"] = inferer(None, network, *inferer_args)[:, 0]
+        data["pred"] = monai.transforms.Activations(sigmoid=True)(data["pred"])
         if convert_to_batch:
             data["pred"] = data["pred"][0]
         return data
