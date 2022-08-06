@@ -41,28 +41,28 @@ class PETCTApp(monailabel.interfaces.app.MONAILabelApp):
     def init_infers(self) -> Dict[str, InferTask]:
         return {
             "PET-CT-Annotation-Direct": model.tasks.PETCTAnnotationInferTask(
-                P_Rnet3D(c_in=5, c_blk=4),
+                P_Rnet3D(c_in=5, c_blk=8),
                 models_path=os.path.join(self.models_dir, "RNet"),
                 postprocessing="direct",
-                preprocess_network=P_Rnet3D(c_in=2, c_blk=4),
+                preprocess_network=P_Rnet3D(c_in=2, c_blk=8),
                 preprocess_network_path=os.path.join(
                     self.models_dir, "PNet", "train_01", "model.pt"
                 ),
             ),
             "PET-CT-Annotation-GC": model.tasks.PETCTAnnotationInferTask(
-                P_Rnet3D(c_in=5, c_blk=4),
+                P_Rnet3D(c_in=5, c_blk=8),
                 models_path=os.path.join(self.models_dir, "RNet"),
                 postprocessing="graphcut",
-                preprocess_network=P_Rnet3D(c_in=2, c_blk=4),
+                preprocess_network=P_Rnet3D(c_in=2, c_blk=8),
                 preprocess_network_path=os.path.join(
                     self.models_dir, "PNet", "train_01", "model.pt"
                 ),
             ),
             "PET-CT-Annotation-CRF": model.tasks.PETCTAnnotationInferTask(
-                P_Rnet3D(c_in=5, c_blk=4),
+                P_Rnet3D(c_in=5, c_blk=8),
                 models_path=os.path.join(self.models_dir, "RNet"),
                 postprocessing="crf",
-                preprocess_network=P_Rnet3D(c_in=2, c_blk=4),
+                preprocess_network=P_Rnet3D(c_in=2, c_blk=8),
                 preprocess_network_path=os.path.join(
                     self.models_dir, "PNet", "train_01", "model.pt"
                 ),
