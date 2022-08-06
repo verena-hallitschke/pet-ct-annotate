@@ -25,7 +25,6 @@ jobs:
         run: |
           pylint --fail-under=9 tests/*
         
-
   black:
     runs-on: ubuntu-latest
     timeout-minutes: 10
