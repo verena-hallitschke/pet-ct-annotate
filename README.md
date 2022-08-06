@@ -36,15 +36,39 @@ git config --global core.autocrlf true
 
 ### MONAILabel Server
 
-Clone, install and start the MONAILabel server:
+
+Use the file [`start_server.sh`](./start_server.sh):
+
 ```bash
+conda activate petct
 pip install ./pet-ct-annotate/MONAILabelMultimodality/
-CUDA_VISIBLE_DEVICES=<N> ./pet-ct-annotate/MONAILabelMultimodality/monailabel/scripts/monailabel start_server -a ./pet-ct-annotate/src/ -s <path_to_study> --conf label_path <path_to_labels>
+start_server.sh <path/to/autopet> <path/to/label/folder>
+```
+
+The script supports the following command line arguments:
+
+```bash
+Shell script to start a multimodal MONAILabel server.
+start_server.sh [-h] [-p PORT] [-d CUDA_DEVICE] [-m MONAI_PATH] [-l PROJECT_PATH] DATA_LOCATION LABEL_LOCATION
+
+
+ARGUMENTS:
+
+         DATA_LOCATION           Path to the autopet dataset.
+         LABEL_LOCATION          Path to the location where the labels will be saved.
+
+OPTIONS:
+
+         -h                      Display this help menu.
+         -p PORT                 Port on which the server starts, defaults to 8000.
+         -d CUDA_DEVICE          CUDA device number on which the inference is performed, defaults to 5. The devices can be checked with the nvidia-smi command.
+         -m MONAI_PATH           Path to the MONAILabel executable, defaults to "./MONAILabelMultimodality/monailabel/scripts/monailabel".
+         -l PROJECT_PATH         Path to the pet-ct-annotate source folder, defaults to "./src".
 ```
 
 #### Model
 
-The model used in this project is a multimodal early fusion version of DeepIGeoS (see [Resources](#resources)). It consists of a proposal (P-Net) and a refinement network (R-Net). The model weights are located in [src/models](./src/models/)
+The model used in this project is a multimodal early fusion version of DeepIGeoS (see [Resources](#resources)). It consists of a proposal (P-Net) and a refinement network (R-Net). The model weights are located in [src/models](./src/models/). The model was trained using the autopet dataset (see [Resources](#resources)) using only the samples labeled as non-small-cell lung carcinoma.
 
 ### 3DSlicer
 
@@ -80,4 +104,4 @@ black tests
 * [MONAI](https://monai.io/): MONAI Consortium. (2022). [MONAI: Medical Open Network for AI](https://github.com/Project-MONAI/MONAI) (Version 0.9.1) [Computer software].
 * DeepIGeoS and [GeodisTK](https://github.com/taigw/GeodisTK): Wang, Guotai, et al. DeepIGeoS: [A deep interactive geodesic framework for medical image segmentation](https://ieeexplore.ieee.org/document/8370732). TPAMI, 2018.
 * [This implementation of DeepIGeoS](https://github.com/HITLAB-DeepIGeoS/DeepIGeoS)
-
+* [autopet dataset](https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=93258287): Gatidis S, Kuestner T. [A whole-body FDG-PET/CT dataset with manually annotated tumor lesions (FDG-PET-CT-Lesions) [Dataset]](https://doi.org/10.7937/gkr0-xv29). The Cancer Imaging Archive, 2022. 
