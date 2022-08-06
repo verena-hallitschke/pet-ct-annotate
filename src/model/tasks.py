@@ -32,6 +32,7 @@ from transforms.ensure_annotation_transform import EnsurePrediction
 
 ALLOW_PROPOSAL = True
 
+
 def init_transforms_load_and_normalize():
     """
     Initialize the transforms relating to loading and normalizing the data.
