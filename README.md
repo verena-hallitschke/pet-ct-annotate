@@ -41,7 +41,8 @@ Use the file [`start_server.sh`](./start_server.sh):
 
 ```bash
 conda activate petct
-pip install ./pet-ct-annotate/MONAILabelMultimodality/
+cd ./pet-ct-annotate/
+pip install ./MONAILabelMultimodality/
 start_server.sh <path/to/autopet> <path/to/label/folder>
 ```
 
