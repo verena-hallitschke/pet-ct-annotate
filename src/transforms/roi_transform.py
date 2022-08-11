@@ -133,7 +133,7 @@ class RegionOfInterestTransform(InteractiveSegmentationTransform):
             mask_box = None
 
         if mask_box is None:
-            logging.warning("No bounding box found!")
+            logging.warning(f"No bounding box found in '{self.cropping_mask_key}'!")
 
             if self.handle_missing_bbox == "full":
                 # run on full image
