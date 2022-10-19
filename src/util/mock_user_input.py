@@ -135,8 +135,12 @@ def get_random_ellipsoid(
             * (
                 np.min(
                     [
-                        0.5 * scales * (image_shape - position),
+                        # Calculate maximum axis length
+                        0.5 * scales * image_shape,
+                        # Calculate minimum margin to beginning of volume
                         np.maximum(position, min_width),
+                        # Calculate minimum margin to end of volume
+                        (image_shape - position - 1)
                     ],
                     axis=0,
                 )
